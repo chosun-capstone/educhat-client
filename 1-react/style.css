@@ -9,7 +9,7 @@ body {
   height: 100vh;
 }
 
-.left{
+.left {
   flex: 1.5;
   flex-direction: column;
   align-items: flex-start;
@@ -18,15 +18,17 @@ body {
   background: #191919;
 }
 
-.upper h2{
+.upper h2 {
   margin-bottom: 15px;
 }
 
-.bar_elem{
+.bar_elem {
   font-size: 18px;
   display: flex;
-  justify-content: start; /* 가로 방향 가운데 정렬 */
-  align-items: center; /* 세로 방향 가운데 정렬 */
+  justify-content: start;
+  /* 가로 방향 가운데 정렬 */
+  align-items: center;
+  /* 세로 방향 가운데 정렬 */
   background-color: #262626;
   width: 180px;
   height: 40px;
@@ -38,11 +40,13 @@ body {
 }
 
 
-.bar_bottom_elem{
+.bar_bottom_elem {
   font-size: 18px;
   display: flex;
-  justify-content: start; /* 가로 방향 가운데 정렬 */
-  align-items: center; /* 세로 방향 가운데 정렬 */
+  justify-content: start;
+  /* 가로 방향 가운데 정렬 */
+  align-items: center;
+  /* 세로 방향 가운데 정렬 */
   width: 180px;
   height: 40px;
   border-radius: 13px;
@@ -53,14 +57,15 @@ body {
 
 }
 
-.bar_bottom_elem:hover{
+.bar_bottom_elem:hover {
   background-color: #262626;
   color: white;
 }
 
 .under {
   position: fixed;
-  bottom: 5%; /* 화면 하단에서 5% 위로 */
+  bottom: 5%;
+  /* 화면 하단에서 5% 위로 */
 }
 
 .envoption,
@@ -69,7 +74,7 @@ body {
 }
 
 /* Center.js의 가운데 css */
-.center_upload{
+.center_upload {
   margin: 0 auto;
   flex: 8.5;
   display: flex;
@@ -81,13 +86,13 @@ body {
   position: relative;
 }
 
-.center_upload h2{
+.center_upload h2 {
   padding-top: -20px;
-  color:white;
+  color: white;
 }
 
 /* Chat.js의 가운데 css */
-.center_chat{
+.center_chat {
   margin: 0 auto;
   flex: 7.5;
   display: flex;
@@ -105,7 +110,8 @@ body {
   border-radius: 10px;
   background-color: #ffffff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  word-wrap: break-word; /* 긴 단어가 있는 경우 단어를 자르고 개행합니다. */
+  word-wrap: break-word;
+  /* 긴 단어가 있는 경우 단어를 자르고 개행합니다. */
 
 }
 
@@ -124,7 +130,7 @@ body {
 }
 
 
-.inputDiv{
+.inputDiv {
   background-color: #262626;
   color: white;
   border: 2px solid#737373;
@@ -132,10 +138,14 @@ body {
   width: 55%;
   border-radius: 15px;
   display: flex;
-  position: fixed; /* fixed로 변경 */
-  left: 50%; /* 수평 중앙으로 이동 */
-  bottom: 5%; /* 화면 하단에서 5% 위로 */
-  transform: translateX(-50%); /* 중앙 정렬을 위해 X축 이동 */
+  position: fixed;
+  /* fixed로 변경 */
+  left: 50%;
+  /* 수평 중앙으로 이동 */
+  bottom: 5%;
+  /* 화면 하단에서 5% 위로 */
+  transform: translateX(-50%);
+  /* 중앙 정렬을 위해 X축 이동 */
 }
 
 .inputDiv input {
@@ -149,7 +159,8 @@ body {
 }
 
 .inputDiv input::placeholder {
-  color: #FFFFFF; /* 원하는 색상으로 변경 */
+  color: #FFFFFF;
+  /* 원하는 색상으로 변경 */
 }
 
 .sendlogo {
@@ -163,7 +174,7 @@ body {
 
 
 
-.Tabs{
+.Tabs {
   color: white;
   background: white;
   flex: 1;
@@ -172,37 +183,54 @@ body {
   align-items: center;
 }
 
-.icon{
+.icon {
   font-size: 1.8rem;
 }
-.txt_size{
+
+.txt_size {
   font-size: 10px;
 }
 
 .Tabs_txt {
   display: flex;
-  flex-direction: column; /* 가로 방향 정렬 */
-  align-items: center; /* 중앙 정렬 */
-  justify-content: center; /* 세로 방향 중앙 정렬 */
-  width: 65px; /* 네모 박스의 너비 */
-  height: 55px; /* 네모 박스의 높이 */
-  border-radius: 0 10px 10px 0;;
-  background-color: #404040; /* 네모 박스의 배경색 */
-  cursor: pointer; /* 클릭 가능한 커서 설정 */
+  flex-direction: column;
+  /* 가로 방향 정렬 */
+  align-items: center;
+  /* 중앙 정렬 */
+  justify-content: center;
+  /* 세로 방향 중앙 정렬 */
+  width: 65px;
+  /* 네모 박스의 너비 */
+  height: 55px;
+  /* 네모 박스의 높이 */
+  border-radius: 0 10px 10px 0;
+  ;
+  background-color: #404040;
+  /* 네모 박스의 배경색 */
+  cursor: pointer;
+  /* 클릭 가능한 커서 설정 */
   position: absolute;
   left: 90%;
 }
 
-.Tabs_summary{
+.Tabs_summary {
   display: flex;
-  flex-direction: column; /* 세로 방향 정렬 */
-  align-items: center; /* 중앙 정렬 */
-  justify-content: center; /* 세로 방향 중앙 정렬 */
-  width: 65px; /* 네모 박스의 너비 */
-  height: 55px; /* 네모 박스의 높이 */
-  border-radius: 0 10px 10px 0;;
-  background-color: #404040; /* 네모 박스의 배경색 */
-  cursor: pointer; /* 클릭 가능한 커서 설정 */
+  flex-direction: column;
+  /* 세로 방향 정렬 */
+  align-items: center;
+  /* 중앙 정렬 */
+  justify-content: center;
+  /* 세로 방향 중앙 정렬 */
+  width: 65px;
+  /* 네모 박스의 너비 */
+  height: 55px;
+  /* 네모 박스의 높이 */
+  border-radius: 0 10px 10px 0;
+  ;
+  background-color: #404040;
+  /* 네모 박스의 배경색 */
+  cursor: pointer;
+  /* 클릭 가능한 커서 설정 */
   position: absolute;
   left: 90%;
   bottom: 83.5%;
@@ -210,14 +238,22 @@ body {
 
 .Tabs_chat {
   display: flex;
-  flex-direction: column; /* 세로 방향 정렬 */
-  align-items: center; /* 중앙 정렬 */
-  justify-content: center; /* 세로 방향 중앙 정렬 */
-  width: 65px; /* 네모 박스의 너비 */
-  height: 55px; /* 네모 박스의 높이 */
-  border-radius: 0 10px 10px 0;;
-  background-color: #404040; /* 네모 박스의 배경색 */
-  cursor: pointer; /* 클릭 가능한 커서 설정 */
+  flex-direction: column;
+  /* 세로 방향 정렬 */
+  align-items: center;
+  /* 중앙 정렬 */
+  justify-content: center;
+  /* 세로 방향 중앙 정렬 */
+  width: 65px;
+  /* 네모 박스의 너비 */
+  height: 55px;
+  /* 네모 박스의 높이 */
+  border-radius: 0 10px 10px 0;
+  ;
+  background-color: #404040;
+  /* 네모 박스의 배경색 */
+  cursor: pointer;
+  /* 클릭 가능한 커서 설정 */
   position: absolute;
   left: 90%;
   bottom: 75.5%;
@@ -225,14 +261,22 @@ body {
 
 .Tabs_question {
   display: flex;
-  flex-direction: column; /* 세로 방향 정렬 */
-  align-items: center; /* 중앙 정렬 */
-  justify-content: center; /* 세로 방향 중앙 정렬 */
-  width: 65px; /* 네모 박스의 너비 */
-  height: 55px; /* 네모 박스의 높이 */
-  border-radius: 0 10px 10px 0;;
-  background-color: #404040; /* 네모 박스의 배경색 */
-  cursor: pointer; /* 클릭 가능한 커서 설정 */
+  flex-direction: column;
+  /* 세로 방향 정렬 */
+  align-items: center;
+  /* 중앙 정렬 */
+  justify-content: center;
+  /* 세로 방향 중앙 정렬 */
+  width: 65px;
+  /* 네모 박스의 너비 */
+  height: 55px;
+  /* 네모 박스의 높이 */
+  border-radius: 0 10px 10px 0;
+  ;
+  background-color: #404040;
+  /* 네모 박스의 배경색 */
+  cursor: pointer;
+  /* 클릭 가능한 커서 설정 */
   position: absolute;
   left: 90%;
   bottom: 67.5%;
@@ -240,8 +284,12 @@ body {
 
 
 /* 네모 박스에 마우스를 올렸을 때 스타일 */
-.Tabs_txt:hover, .Tabs_summary:hover, .Tabs_chat:hover, .Tabs_question:hover {
-  background-color: #262626; /* 마우스를 올렸을 때의 배경색 */
+.Tabs_txt:hover,
+.Tabs_summary:hover,
+.Tabs_chat:hover,
+.Tabs_question:hover {
+  background-color: #262626;
+  /* 마우스를 올렸을 때의 배경색 */
 }
 
 
@@ -259,14 +307,15 @@ body {
 .login-box {
   display: flex;
   flex-direction: column;
-  align-items:center;
+  align-items: center;
   padding: 15% 7%;
   background-color: rgb(69, 67, 67);
   border-radius: 3px;
 
 }
+
 .container {
-    vertical-align : top;
+  vertical-align: top;
   display: flex;
 }
 
@@ -282,7 +331,8 @@ body {
 .white-text {
   color: white;
   font-size: 26px;
-  font-weight: 500; /* bold와 같음 */
+  font-weight: 500;
+  /* bold와 같음 */
 }
 
 .login-header {
@@ -300,6 +350,7 @@ body {
   align-items: center;
   width: 100%;
 }
+
 /* 제목 */
 h1 {
   font-size: 24px;
@@ -375,6 +426,7 @@ button {
   color: black;
   text-align: center;
 }
+
 .privacy-policy {
   color: rgb(43, 43, 199);
 }
@@ -386,15 +438,15 @@ button {
   position: relative;
 
 
-  text-align:center;
-  padding:10px;
-  margin-bottom:20px;
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 20px;
   border-radius: 13px;
 
   display: flex;
   flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .upload_box:before {
@@ -409,4 +461,13 @@ button {
 
 .file_upload {
   display: none;
+}
+
+.parent {
+  border-left: #ffffff;
+  color: white;
+  background-color: #ffffff;
+  padding: 10rem;
+  position: "absolute";
+  right: 700;
 }

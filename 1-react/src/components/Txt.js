@@ -9,27 +9,8 @@ import { FaQuestion } from "react-icons/fa";
 import { FaBook } from "react-icons/fa";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Document, Page, pdfjs } from 'react-pdf';
-import axios from 'axios'
-import { redirect } from 'next/dist/server/api-utils';
 
-function AxiosTestComponet() {
-  const baseUrl = "http://localhost:8080";;
-  const [data, setData] = useState();
-  useEffect(() => {
-    springDataSet();
-  }, [])
-}
-async function springDataSet() {
-  await axios
-    .get(baseUrl + "/data-test")
-    .then((res) => {
-      console.log(res);
-      setData(res.dat);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-}
+
 
 // PDF.js worker 경로 설정
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -38,6 +19,7 @@ const Txt = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([
+
   ]);
   const [numPages, setNumPages] = useState(null);
   const [file, setFile] = useState(null);
@@ -125,9 +107,7 @@ const Txt = () => {
       </div>
 
       <div className="center_chat" >
-        <prev>eva_Test</prev>
       </div>
-
       <div className="right" style={{ flex: 1, display: 'flex', flexDirection: 'column', }}>
         <div className="Tabs" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <div className="Tabs_txt" onClick={GoTxt}>

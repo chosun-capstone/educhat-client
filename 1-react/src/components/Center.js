@@ -29,7 +29,33 @@ const Center = () => {
         navigate("/login");
 
     };
-    
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const fileExtension = file.name.split('.').pop().toLowerCase();
+          const supportedFormats = ['pptx', 'txt', 'pdf', 'dotx'];
+  
+          if (supportedFormats.includes(fileExtension)) {
+              // 지원되는 파일 형식일 경우 txt.js로 이동
+              navigate('/txt', { file });
+          } else {
+              // 지원되지 않는 파일 형식일 경우 알림 표시
+              alert('지원하지 않는 파일 형식입니다.');
+          }
+        }
+      };
+      
+      const handleDrop = (event) => {
+        event.preventDefault();
+        const file = event.dataTransfer.files[0];
+        handleFile(file);
+      }
+  
+      const handleDragOver = (event) => {
+        event.preventDefault();
+      }
+
     const Logo = () => (
         <svg className="icon" x="0px" y="0px" viewBox="0 0 24 24">
             <path fill="transparent" d="M0,0h24v24H0V0z"/>
@@ -90,7 +116,7 @@ const Center = () => {
                     alignItems: "center",
                     justifyContent: "center",
                 }}>
-                    <input type="file" className="file_upload"/>
+                    <input type="file" className="file_upload" onChange={handleFileChange}/>
                     <div className="upload_box" style={{marginTop: "64px"}}>
                         <Upload/>
                         <div style={{fontSize: "32px", color: "#A3A3A3"}}>끌어서 문서 업로드</div>

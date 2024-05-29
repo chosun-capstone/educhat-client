@@ -8,12 +8,12 @@ import { CgFormatLeft } from "react-icons/cg";
 import { FaQuestion } from "react-icons/fa";
 import { FaBook } from "react-icons/fa";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Document, Page, pdfjs } from 'react-pdf';
+//import { Document, Page, pdfjs } from 'react-pdf';
 
 
 
 // PDF.js worker 경로
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+//pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const Txt = () => {
   const navigate = useNavigate();

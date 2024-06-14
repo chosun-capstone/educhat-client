@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom"
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import axios from "axios";
 
-const serverUrl = (path) => `http://localhost:8090${path}`;
+const serverUrl = (path) => `https://educhat-server.yeongmin.kr${path}`;
 
 const Center = () => {
 
@@ -243,31 +243,88 @@ const Home = (props) => {
 
 const Viewer = (props) => {
     console.log(props.selectedFile);
+    const [viewMode, setViewMode] = useState(0); //0 문서보기 1 요약보기 2 질문하기 3 문제보기
     const docs = [
-        { uri: serverUrl("/files/" + props.selectedFile.fileId)  }, // Remote file
+        { uri: serverUrl("/files/" + props.selectedFile.fileId),
+            fileName: props.selectedFile.fileName
+        }, // Remote file
     ];
-    return <>
-        <DocViewer documents={docs} pluginRenderers={DocViewerRenderers} style={{
-            width: "100%",
-            height: "100%"
-        }} theme={{
-            primary: "#262626",
-            secondary: "#ffffff",
-            tertiary: "#525252",
-            textPrimary: "#ffffff",
-            textSecondary: "#5296d8",
-            textTertiary: "#ffffff",
-            disableThemeScrollbar: false,
-        }} config={{
-            pdfVerticalScrollByDefault: true,
-            pdfZoom: {
-                defaultZoom: 1.1, // 1 as default,
-                zoomJump: 0.2, // 0.1 as default,
-            },
-        }}
+    const onTapSwitch = (num) => {
+        setViewMode(num);
+    }
+    const docView = <DocViewer documents={docs} pluginRenderers={DocViewerRenderers} style={{
+        height: "100%"
+    }} theme={{
+        primary: "#262626",
+        secondary: "#ffffff",
+        tertiary: "#525252",
+        textPrimary: "#ffffff",
+        textSecondary: "#5296d8",
+        textTertiary: "#ffffff",
+        disableThemeScrollbar: false,
+    }} config={{
+        pdfVerticalScrollByDefault: true,
+        pdfZoom: {
+            defaultZoom: 1.0, // 1 as default,
+            zoomJump: 0.2, // 0.1 as default,
+        },
+    }}
 
-        />
-    </>
+    />
+
+    const getViewByViewMode = () => {
+        switch (viewMode) {
+            case 0:
+                return docView;
+            case 1:
+                return <></>
+        }
+    }
+    return <div className='view_main'>
+        <div style={{height: '100%', backgroundColor: '#262626', flexGrow: 1}}>
+            {
+                getViewByViewMode()
+            }
+        </div>
+        <div className='view_sidebar' style={{height: '100%', backgroundColor: '#E5E5E5', flexGrow: 0}}>
+            <div className={viewMode === 0 ? 'sidebar_btn_sel' : 'sidebar_btn'} onClick={() => {
+                onTapSwitch(0);
+            }}>
+                <svg style={{
+                    width: '23px',
+                    height: '23px'
+                }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill='#E5E5E5' d="M64 464c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16H224v80c0 17.7 14.3 32 32 32h80V448c0 8.8-7.2 16-16 16H64zM64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V154.5c0-17-6.7-33.3-18.7-45.3L274.7 18.7C262.7 6.7 246.5 0 229.5 0H64zm56 256c-13.3 0-24 10.7-24 24s10.7 24 24 24H264c13.3 0 24-10.7 24-24s-10.7-24-24-24H120zm0 96c-13.3 0-24 10.7-24 24s10.7 24 24 24H264c13.3 0 24-10.7 24-24s-10.7-24-24-24H120z"/></svg>
+                <a>문서 보기</a>
+            </div>
+            <div className={viewMode === 1 ? 'sidebar_btn_sel' : 'sidebar_btn'} onClick={() => {
+                onTapSwitch(1);
+            }}>
+                <svg style={{
+                    width: '23px',
+                    height: '23px'
+                }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill='#E5E5E5' d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>
+                <a>요약 보기</a>
+            </div>
+            <div className={viewMode === 2 ? 'sidebar_btn_sel' : 'sidebar_btn'} onClick={() => {
+                onTapSwitch(2);
+            }}>
+                <svg style={{
+                    width: '23px',
+                    height: '23px'
+                }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill='#E5E5E5' d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"/></svg>
+                <a>질문 하기</a>
+            </div>
+            <div className={viewMode === 3 ? 'sidebar_btn_sel' : 'sidebar_btn'} onClick={() => {
+                onTapSwitch(3);
+            }}>
+                <svg style={{
+                    width: '23px',
+                    height: '23px'
+                }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill='#E5E5E5' d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
+                        <a>문제 보기</a>
+            </div>
+        </div>
+    </div>
 }
 
 export default Center;

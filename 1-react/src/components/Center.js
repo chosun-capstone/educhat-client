@@ -7,7 +7,8 @@ import {useNavigate} from "react-router-dom"
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import axios from "axios";
 
-const serverUrl = (path) => `https://educhat-server.yeongmin.kr${path}`;
+//const serverUrl = (path) => `https://educhat-server.yeongmin.kr${path}`;
+const serverUrl = (path) => `http://localhost:8090${path}`;
 
 const Center = () => {
 
@@ -243,6 +244,12 @@ const Home = (props) => {
 
 const Viewer = (props) => {
     console.log(props.selectedFile);
+    const [summaryArr, setSummaryArr] = useState([]);
+    useEffect(() => {
+        axios.get(serverUrl('/summary/' + props.selectedFile.fileId)).then((res) => {
+            setSummaryArr(res.data);
+        });
+    }, [props.selectedFile]);
     const [viewMode, setViewMode] = useState(0); //0 문서보기 1 요약보기 2 질문하기 3 문제보기
     const docs = [
         { uri: serverUrl("/files/" + props.selectedFile.fileId),
@@ -272,12 +279,55 @@ const Viewer = (props) => {
 
     />
 
+    const summaryView = () => {
+        const resArr = []
+        summaryArr.forEach((item) => {
+            resArr.push(<div key={item.id} className='summary_item'>
+                <h2>페이지 {item.page}</h2>
+                {item.content}
+            </div>);
+        });
+        return <div style={{
+            display:'flex',
+            flexDirection: 'row',
+            height: '100%',
+        }}>
+            <DocViewer documents={docs} pluginRenderers={DocViewerRenderers} style={{
+                 height: "100%",
+                flexGrow: '2',
+                width: '50%'
+            }} theme={{
+                primary: "#262626",
+                secondary: "#ffffff",
+                tertiary: "#525252",
+                textPrimary: "#ffffff",
+                textSecondary: "#5296d8",
+                textTertiary: "#ffffff",
+                disableThemeScrollbar: false,
+            }} config={{
+                pdfVerticalScrollByDefault: true,
+                pdfZoom: {
+                    defaultZoom: 1.0, // 1 as default,
+                    zoomJump: 0.2, // 0.1 as default,
+                },
+            }}
+
+            />
+            <div style={{
+                padding: '20px 16px 20px 16px',
+                flexGrow: '1',
+                width: '50%'
+            }}>{resArr}</div>
+
+        </div>
+    }
+
     const getViewByViewMode = () => {
         switch (viewMode) {
             case 0:
                 return docView;
             case 1:
-                return <></>
+                return summaryView();
         }
     }
     return <div className='view_main'>

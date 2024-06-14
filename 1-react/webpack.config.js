@@ -9,7 +9,8 @@ module.exports = {
   devtool: "inline-source-map",
   devServer: {
     contentBase: "./",
-    allowedHosts: ["all"]
+    disableHostCheck: true,
+    allowedHosts: ["educhat.yeongmin.kr"]
   },
   module: {
     rules: [

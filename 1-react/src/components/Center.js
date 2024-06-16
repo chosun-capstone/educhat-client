@@ -74,7 +74,7 @@ const Center = () => {
         setSelectedFile(file);
     }
     const Rest_api_key='025e2cb1c928cf476f60b82df2a1e547' //REST API KEY
-    const redirect_uri = 'http://localhost:8080/' //Redirect URI
+    const redirect_uri = 'https://educhat.yeongmin.kr/' //Redirect URI
     // oauth 요청 URL
     const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`
     const handleLogin = ()=>{

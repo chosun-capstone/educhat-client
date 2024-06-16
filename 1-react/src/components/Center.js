@@ -55,9 +55,8 @@ const Center = () => {
         if (isUploading) return;
         (async () => {
             const res = await axios.get(serverUrl('/files'));
-            setFileArray(res.data);
+            if(res.data !== fileArray) setFileArray(res.data);
         })();
-
     }, [isUploading]);
 
     const onClickItem = (file) => {
@@ -70,7 +69,7 @@ const Center = () => {
         <div className="app">
             <div className="left">
                 <div className='upper'>
-                    <h2> EduCHAT:에듀챗 </h2>
+                    <h2> EduCHAT : 에듀챗 </h2>
                     <div className='bar_elem' onClick={GoHome}>
                         <FaHome size={27}/>
                         <span>Home</span>
@@ -214,7 +213,7 @@ const Home = (props) => {
             }}/>:<></>}
 
             <h2 style={{fontSize: "80px", margin: "0"}}>EduCHAT</h2>
-            <h2 style={{fontSize: "50px", margin: "0", fontWeight: "normal"}}>함께 배우고 함께 성장하는,,</h2>
+            <h2 style={{fontSize: "50px", margin: "0", fontWeight: "normal"}}>함께 배우고 함께 성장하는 동반자</h2>
             <label className="preview" style={{
                 display: "flex",
                 flexDirection: "column",
@@ -243,57 +242,127 @@ const Home = (props) => {
 }
 
 const Viewer = (props) => {
-    console.log(props.selectedFile);
+    const selectedFile = props.selectedFile;
+    console.log(selectedFile);
+    const [questionArr, setQuestionArr] = useState([]);
     const [summaryArr, setSummaryArr] = useState([]);
+    const [viewMode, setViewMode] = useState(0); //0 문서보기 1 요약보기 2 질문하기 3 문제보기
+    const [questionOpen, setQuestionOpen] = useState(false);
+    const [viewerKey, setViewerKey] = useState(0);
     useEffect(() => {
         axios.get(serverUrl('/summary/' + props.selectedFile.fileId)).then((res) => {
             setSummaryArr(res.data);
         });
-    }, [props.selectedFile]);
-    const [viewMode, setViewMode] = useState(0); //0 문서보기 1 요약보기 2 질문하기 3 문제보기
-    const docs = [
-        { uri: serverUrl("/files/" + props.selectedFile.fileId),
-            fileName: props.selectedFile.fileName
-        }, // Remote file
-    ];
+
+        axios.get(serverUrl('/question/' + props.selectedFile.fileId)).then((res) => {
+            setQuestionArr(res.data);
+        });
+    }, [selectedFile]);
+    useEffect(() => {
+        setViewerKey(viewerKey + 1);
+    }, [selectedFile, viewMode]);
+
     const onTapSwitch = (num) => {
         setViewMode(num);
     }
-    const docView = <DocViewer documents={docs} pluginRenderers={DocViewerRenderers} style={{
-        height: "100%"
-    }} theme={{
-        primary: "#262626",
-        secondary: "#ffffff",
-        tertiary: "#525252",
-        textPrimary: "#ffffff",
-        textSecondary: "#5296d8",
-        textTertiary: "#ffffff",
-        disableThemeScrollbar: false,
-    }} config={{
-        pdfVerticalScrollByDefault: true,
-        pdfZoom: {
-            defaultZoom: 1.0, // 1 as default,
-            zoomJump: 0.2, // 0.1 as default,
-        },
-    }}
 
-    />
 
     const summaryView = () => {
         const resArr = []
+        resArr.push(<h1>문서 요약보기</h1>);
+
         summaryArr.forEach((item) => {
             resArr.push(<div key={item.id} className='summary_item'>
                 <h2>페이지 {item.page}</h2>
                 {item.content}
             </div>);
         });
-        return <div style={{
-            display:'flex',
-            flexDirection: 'row',
-            height: '100%',
-        }}>
-            <DocViewer documents={docs} pluginRenderers={DocViewerRenderers} style={{
-                 height: "100%",
+        return       <div style={{
+            padding: '20px 16px 20px 16px',
+            flexGrow: '1',
+            width: '50%'
+        }}>{selectedFile.status !== 'PROCESSED' ?<div>
+            <h3>파일을 분석하고 있습니다..</h3>
+            <a>잠시만 기다려주세요</a>
+        </div> : resArr}</div>
+    }
+
+    const askView = () => {
+        const resArr = []
+        resArr.push(<h1>문서 질문하기</h1>);
+
+        summaryArr.forEach((item) => {
+            resArr.push(<div key={item.id} className='summary_item'>
+                <h2>페이지 {item.page}</h2>
+                {item.content}
+            </div>);
+        });
+        return       <div style={{
+            padding: '20px 16px 20px 16px',
+            flexGrow: '1',
+            width: '50%'
+        }}>질문하기</div>
+    }
+
+    const quesView = () => {
+        const resArr = []
+        const ansArr = []
+        resArr.push(<h1>문서 문제보기</h1>);
+
+        questionArr.forEach((item) => {
+            resArr.push(<div key={item.id} className=''>
+                <div>
+                    <h3 style={{display: 'inline-block'}}>문제 {item.idx}.&nbsp;</h3>
+                    <div dangerouslySetInnerHTML={{__html: item.question}}></div>
+                </div>
+            </div>);
+
+            ansArr.push(<div key={item.id} className=''>
+                <div>
+                    <h3>문제 {item.idx}</h3>
+                    <a>정답: {item.answer}</a><br/>
+                    <a>해설: {item.explain}</a>
+                </div>
+            </div>);
+        });
+        return       <div style={{
+            padding: '20px 16px 20px 16px',
+            flexGrow: '1',
+            width: '50%'
+        }}>{resArr}
+            {questionOpen === false ?
+                <div onClick={() => setQuestionOpen(true)}>문제 정답보기</div> :
+                <div onClick={() => setQuestionOpen(false)}>문제 정답 가리기</div>}
+            {questionOpen ? <div>{ansArr}</div> : <></>}
+        </div>
+    }
+
+    const getViewByViewMode = () => {
+        switch (viewMode) {
+            case 0:
+                return <></>;
+            case 1:
+                return summaryView();
+            case 2:
+                return askView();
+            case 3:
+                return quesView();
+            default:
+                return <></>;
+        }
+    }
+    return <div className='view_main'>
+        <div style={{height: '100%', backgroundColor: '#262626', flexGrow: 1, display:'flex',
+            flexDirection: 'row',}}>
+            <DocViewer
+                key={viewerKey}
+                documents={[
+                {
+                    uri: serverUrl("/files/" + props.selectedFile.fileId),
+                    fileName: props.selectedFile.fileName
+                }, // Remote file
+            ]} pluginRenderers={DocViewerRenderers} style={{
+                height: "100%",
                 flexGrow: '2',
                 width: '50%'
             }} theme={{
@@ -310,33 +379,13 @@ const Viewer = (props) => {
                     defaultZoom: 1.0, // 1 as default,
                     zoomJump: 0.2, // 0.1 as default,
                 },
-            }}
-
-            />
-            <div style={{
-                padding: '20px 16px 20px 16px',
-                flexGrow: '1',
-                width: '50%'
-            }}>{resArr}</div>
-
-        </div>
-    }
-
-    const getViewByViewMode = () => {
-        switch (viewMode) {
-            case 0:
-                return docView;
-            case 1:
-                return summaryView();
-        }
-    }
-    return <div className='view_main'>
-        <div style={{height: '100%', backgroundColor: '#262626', flexGrow: 1}}>
+            }}/>
             {
                 getViewByViewMode()
             }
+
         </div>
-        <div className='view_sidebar' style={{height: '100%', backgroundColor: '#E5E5E5', flexGrow: 0}}>
+        <div className='view_sidebar' style={{height: '100%', backgroundColor: '#E5E5E5',  width: '110px'}}>
             <div className={viewMode === 0 ? 'sidebar_btn_sel' : 'sidebar_btn'} onClick={() => {
                 onTapSwitch(0);
             }}>
@@ -355,6 +404,15 @@ const Viewer = (props) => {
                 }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill='#E5E5E5' d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>
                 <a>요약 보기</a>
             </div>
+            <div className={viewMode === 3 ? 'sidebar_btn_sel' : 'sidebar_btn'} onClick={() => {
+                onTapSwitch(3);
+            }}>
+                <svg style={{
+                    width: '23px',
+                    height: '23px'
+                }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill='#E5E5E5' d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
+                <a>문제 보기</a>
+            </div>
             <div className={viewMode === 2 ? 'sidebar_btn_sel' : 'sidebar_btn'} onClick={() => {
                 onTapSwitch(2);
             }}>
@@ -364,15 +422,7 @@ const Viewer = (props) => {
                 }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill='#E5E5E5' d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"/></svg>
                 <a>질문 하기</a>
             </div>
-            <div className={viewMode === 3 ? 'sidebar_btn_sel' : 'sidebar_btn'} onClick={() => {
-                onTapSwitch(3);
-            }}>
-                <svg style={{
-                    width: '23px',
-                    height: '23px'
-                }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill='#E5E5E5' d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
-                        <a>문제 보기</a>
-            </div>
+
         </div>
     </div>
 }

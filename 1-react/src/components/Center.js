@@ -11,7 +11,17 @@ const serverUrl = (path) => `https://educhat-server.yeongmin.kr${path}`;
 //const serverUrl = (path) => `http://localhost:9990${path}`;
 
 const Center = () => {
-
+    const code = new URL(window.location.href).searchParams.get("code");
+    useEffect(() => {
+        const delCode = localStorage.getItem("code");
+        if(delCode) {
+            setIsLoggedIn(true);
+        }
+        else if(code) {
+            localStorage.setItem("code", code);
+            location.href = "/";
+        }
+    }, []);
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [fileArray, setFileArray] = useState([]);
@@ -29,13 +39,14 @@ const Center = () => {
 
     const handleButtonLogOut = () => {
         // 로그아웃 할 수 있는 기능
+        console.log("LOGOUT")
+        localStorage.removeItem("code");
         setIsLoggedIn(false);
     };
 
     const handleButtonLogIn = () => {
         // 로그인 화면으로 넘어가는 기능
         setIsLoggedIn(true);
-        navigate("/login");
 
     };
 
@@ -62,11 +73,17 @@ const Center = () => {
     const onClickItem = (file) => {
         setSelectedFile(file);
     }
-
+    const Rest_api_key='025e2cb1c928cf476f60b82df2a1e547' //REST API KEY
+    const redirect_uri = 'http://localhost:8080/' //Redirect URI
+    // oauth 요청 URL
+    const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`
+    const handleLogin = ()=>{
+        window.location.href = kakaoURL
+    }
 
 
     return (
-        <div className="app">
+        isLoggedIn ? <div className="app">
             <div className="left">
                 <div className='upper'>
                     <h2> EduCHAT : 에듀챗 </h2>
@@ -89,7 +106,7 @@ const Center = () => {
                             <span>환경설정</span>
                         </div>
                     </div>
-                    <div className='bar_bottom_elem'>
+                    <div className='bar_bottom_elem' onClick={isLoggedIn?handleButtonLogOut:handleButtonLogIn}>
                         {isLoggedIn ? (
                             <>
                                 <LuLogOut onClick={handleButtonLogOut}/> 로그아웃
@@ -107,6 +124,29 @@ const Center = () => {
 
                 {selectedFile == null ? <Home isUploading={isUploading} setUploading={setUploading}/> :<Viewer selectedFile={selectedFile}/>}
             </div>
+        </div> :  <div className="login-container">
+            <div className="lbw">
+                <div className="login-box">
+                    <div className="white-text">EDUCHAT에 오신것을</div>
+                    <div className="white-text">환영합니다</div>
+                </div>
+                <div className="login-box1">
+
+                    <h4 >다음으로 로그인하기</h4>
+                    <div className="login-options">
+                        <button className="kakao-login" onClick={handleLogin}>
+                            <img src='./images/kakaologin.png' alt="KaKao로 로그인" width={"280"} />
+                        </button>
+                        {/*<button className="google-login">*/}
+                        {/*    <img src='./images/googlelogin.png' alt="Google로 로그인하기" width={"280"} />*/}
+                        {/*</button>*/}
+                    </div>
+                    <div className="copyright">
+                        로그인 할 경우 <span className="privacy-policy">개인정보처리방침</span>에 동의합니다
+                    </div>
+                </div>
+            </div>
+
         </div>
     );
 
@@ -250,6 +290,7 @@ const Viewer = (props) => {
     const [questionOpen, setQuestionOpen] = useState(false);
     const [viewerKey, setViewerKey] = useState(0);
     useEffect(() => {
+        setQuestionOpen(false);
         axios.get(serverUrl('/summary/' + props.selectedFile.fileId)).then((res) => {
             setSummaryArr(res.data);
         });
@@ -260,7 +301,7 @@ const Viewer = (props) => {
     }, [selectedFile]);
     useEffect(() => {
         setViewerKey(viewerKey + 1);
-    }, [selectedFile, viewMode]);
+    }, [selectedFile, viewMode, questionOpen]);
 
     const onTapSwitch = (num) => {
         setViewMode(num);
@@ -308,18 +349,19 @@ const Viewer = (props) => {
         const resArr = []
         const ansArr = []
         resArr.push(<h1>문서 문제보기</h1>);
+        ansArr.push(<h1>문제 정답보기</h1>)
 
         questionArr.forEach((item) => {
             resArr.push(<div key={item.id} className=''>
                 <div>
-                    <h3 style={{display: 'inline-block'}}>문제 {item.idx}.&nbsp;</h3>
+                    <h3 style={{display: 'inline-block'}}>문제 {item.idx+1}.&nbsp;</h3>
                     <div dangerouslySetInnerHTML={{__html: item.question}}></div>
                 </div>
             </div>);
 
             ansArr.push(<div key={item.id} className=''>
                 <div>
-                    <h3>문제 {item.idx}</h3>
+                    <h3>문제 {item.idx+1}</h3>
                     <a>정답: {item.answer}</a><br/>
                     <a>해설: {item.explain}</a>
                 </div>
@@ -328,7 +370,8 @@ const Viewer = (props) => {
         return       <div style={{
             padding: '20px 16px 20px 16px',
             flexGrow: '1',
-            width: '50%'
+            width: '50%',
+            overflowY: 'scroll'
         }}>{resArr}
             {questionOpen === false ?
                 <div onClick={() => setQuestionOpen(true)}>문제 정답보기</div> :

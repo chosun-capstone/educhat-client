@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Center from './components/Center.js';
 import SLogIn from './components/SLogin.js';
@@ -15,17 +15,12 @@ export default class App extends React.Component {
     };
   }
   render() {
+
     return (
       <div>
         <Router>
           <Routes>
-            <Route path="/" element={<Center />} />
-            <Route path="/login" element={<SLogIn />} />
-            <Route path="/center" element={<Center />} />
-            <Route path="/txt" element={<Txt/>} />
-            <Route path="/summary" element={<Summary/>} />
-            <Route path="/chat" element={<Chat/>} />
-            <Route path="/question" element={<Question/>} />
+            <Route path="/" element={ <Center /> }/>
           </Routes>
         </Router>
       </div>

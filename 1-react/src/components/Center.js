@@ -7,8 +7,8 @@ import {useNavigate} from "react-router-dom"
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import axios from "axios";
 
-//const serverUrl = (path) => `https://educhat-server.yeongmin.kr${path}`;
-const serverUrl = (path) => `http://localhost:8090${path}`;
+const serverUrl = (path) => `https://educhat-server.yeongmin.kr${path}`;
+//const serverUrl = (path) => `http://localhost:9990${path}`;
 
 const Center = () => {
 

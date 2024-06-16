@@ -51,7 +51,7 @@ export default class Center extends React.Component {
                         <input type="file" className="file" />
                         <Logo />
                         <p className="preview_msg">클릭 혹은 파일을 이곳에 드롭하세요.</p>
-                        <p className="preview_desc">(지원 포맷: .pptx, .dotx, .pdf, .txt)</p>
+                        <p className="preview_desc">(지원 포맷: .pptx, .docx, .pdf, .txt)</p>
                     </label>
                 </div>
             </div>
